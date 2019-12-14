@@ -2,27 +2,31 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <ctime>
 #include "Algorithms.h"
 
 using namespace std;
 
+
 int size;
-double* myList;
 double* bubbleList;
 double* insertionList;
 double* quickList;
-double* mergeList;
+double* selectionList;
 
-Algorithms::Algorithms(){
+Algorithms::Algorithms(){ //constructor
   size = 0;
   bubbleList = new double[0];
   insertionList = new double[0];
   quickList = new double[0];
-  mergeList = new double[0];
+  selectionList = new double[0];
 }
 
 Algorithms::~Algorithms(){
-
+  delete[] bubbleList;
+  delete[] insertionList;
+  delete[] quickList;
+  delete[] selectionList;
 }
 
 void Algorithms::bubbleSort(){
@@ -78,6 +82,23 @@ void Algorithms::quickSort(int left, int right){
     }
 }
 
+void Algorithms::selectionSort(){
+  int i,j,minIndex,tmp;
+  for(i = 0;i<size-1;++i){
+    minIndex = 1;
+    for(j = i+1;j<size;j++){
+      if(selectionList[j] < selectionList[minIndex]){
+        minIndex = j;
+      }
+    }
+    if(minIndex != i){
+      tmp = selectionList[i];
+      selectionList[i] = selectionList[minIndex];
+      selectionList[minIndex] = tmp;
+    }
+  }
+}
+
 void Algorithms::setFile(string fileName){ //translates info from map file and creates the grid
   try{
     ifstream readFile(fileName);
@@ -89,14 +110,14 @@ void Algorithms::setFile(string fileName){ //translates info from map file and c
         bubbleList = new double[stoi(tempString)];
         insertionList = new double[stoi(tempString)];
         quickList = new double[stoi(tempString)];
-        mergeList = new double[stoi(tempString)];
+        selectionList = new double[stoi(tempString)];
         ++index;
       }
       else{
         bubbleList[index - 1] = stoi(tempString);
         insertionList[index - 1] = stoi(tempString);
         quickList[index - 1] = stoi(tempString);
-        mergeList[index - 1] = stoi(tempString);
+        selectionList[index - 1] = stoi(tempString);
         ++index;
       }
     }
@@ -107,22 +128,38 @@ void Algorithms::setFile(string fileName){ //translates info from map file and c
 }
 
 void Algorithms::printList(){
-  cout << "bubble" << endl;
-  for(int i = 0;i<size;++i){
-    cout << bubbleList[i] << ",";
-  }
+  time_t start;
+  time_t end;
+  cout << "Bubble Sort" << endl;
+  time(&start);
+  bubbleSort();
+  time(&end);
+  cout << "Sort Start: " << start << endl;
+  cout << "Sort End: " << end << endl;
   cout << endl;
 
-  cout << "Insertion" << endl;
-  for(int i = 0;i<size;++i){
-    cout << insertionList[i] << ",";
-  }
+  cout << "Insertion Sort" << endl;
+  time(&start);
+  insertionSort();
+  time(&end);
+  cout << "Sort Start: " << start << endl;
+  cout << "Sort End: " << end << endl;
   cout << endl;
 
-  cout << "quick" << endl;
-  for(int i = 0;i<size;++i){
-    cout << quickList[i] << ",";
-  }
+  cout << "Quick Sort" << endl;
+  time(&start);
+  quickSort(0, size-1);
+  time(&end);
+  cout << "Sort Start: " << start << endl;
+  cout << "Sort End: " << end << endl;
+  cout << endl;
+
+  cout << "Selection Sort" << endl;
+  time(&start);
+  selectionSort();
+  time(&end);
+  cout << "Sort Start: " << start << endl;
+  cout << "Sort End: " << end << endl;
   cout << endl;
 }
 
